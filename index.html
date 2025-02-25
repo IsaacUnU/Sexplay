@@ -8,8 +8,10 @@
     <link rel="icon" href="icon-192.png" type="image/x-icon">
     <script>
         if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js');
-    }
+    navigator.serviceWorker.register('serviceWorker.js')
+    .then(reg => console.log('Service Worker registrado:', reg))
+    .catch(err => console.error('Error al registrar el Service Worker:', err));
+    }   
     </script>
     <style>
         body {
