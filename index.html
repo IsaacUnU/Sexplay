@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Picante 🔥</title>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ff007f;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 5vh;
+            padding: 20px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button {
+            background: linear-gradient(45deg, #ff007f, #ff4d00);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+            margin: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .reto, .dados {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        input {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            width: calc(100% - 22px);
+            max-width: 300px;
+        }
+        li {
+            list-style-type: none;
+        }   
+        .normas {
+            background-color: rgba(255, 0, 127, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 400px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Juego Picante 🔥</h1>
+        
+        <button onclick="toggleNormas()">📜 Mostrar / Ocultar Normas</button>
+        <div class="normas" id="normas">
+            <h2>📜 Normas del Juego 📜</h2>
+            <ul>
+                <li>Empezais con una tirada de ruleta cada uno y si toca beber bebeis los dos.</li>
+                <li>Si te niegas a un reto, debes tirar ruleta.</li>
+                <li>Si sale "Tirar Dados", ambos deben participar.</li>
+                <li>Las prendas quitadas no pueden volver a ponerse hasta el final del juego.</li>
+                <li>Si alguien no cumple un reto, la otra persona puede ponerle un castigo.</li>
+                <li>El juego termina cuando no aguanteis mas 🔥</li>
+                <li>¡Diviértete y juega con confianza! 🔥</li>
+            </ul>
+        </div>
+        
+        <button onclick="mostrarReto()">Siguiente Reto</button>
+        <p class="reto" id="reto"></p>
+        <div class="input-container">
+            <input type="text" id="nuevoReto" placeholder="Escribe un nuevo reto">
+            <button onclick="agregarReto()">Añadir Reto</button>
+        </div>
+        
+        <h2>🎲 Dados Eróticos 🎲</h2>
+        <button onclick="tirarDados()">Tirar Dados</button>
+        <p class="dados" id="resultadoDados"></p>
+    </div>
+
+    <script>
+        let retos = [
+            "Bebe un trago y besa con sabor",
+            "Quita una prenda usando solo los dientes",
+            "Dale un beso con mordida en los labios",
+            "Haz un masaje sensual en la espalda",
+            "Baila eróticamente frente a tu pareja",
+            "Desliza un cubo de hielo por su piel con la boca",
+            "Susurra tu fantasía más sucia en su oído",
+            "Chupa su cuello durante 15 segundos",
+            "Juega con sus dedos de forma provocativa",
+            "Muerde suavemente una parte del cuerpo a elección",
+            "Ponte un antifaz y deja que haga lo que quiera por 2 minutos",
+            "Haz que tu pareja elija una prenda para quitarte",
+            "Lame un poco de nata o chocolate de su piel",
+            "Realiza un beso francés profundo y provocador",
+            "Toca a tu pareja debajo de la ropa por 20 segundos",
+            "Haz un striptease al ritmo de la música",
+            "Deja que tu pareja controle lo que hagas por 3 minutos",
+            "Dale placer oral por 30 segundos",
+            "Tu pareja debe vendarte los ojos y sorprenderte",
+            "Toma un shot y deja que tu pareja te bese intensamente",
+            "Tu pareja elige una zona prohibida para besar",
+            "Haz contacto visual mientras te besas apasionadamente",
+            "Pasa tus labios por su cuerpo sin usar la lengua",
+            "Dale un masaje en una zona erógena",
+            "Bebe un trago y quita una prenda con sensualidad",
+            "Simula una escena de película erótica por 1 minuto",
+            "Dale un beso en una parte inesperada de su cuerpo",
+            "Lame sus labios lentamente sin besarlo",
+            "Juega con su ropa sin quitársela todavía",
+            "Haz un reto sensual que elija tu pareja",
+            "Usa solo la lengua para recorrer su cuello",
+            "Dile a tu pareja algo sucio al oído sin reírte",
+            "Tu pareja debe tocarte durante 1 minuto",
+            "Beber todos y besaros",
+            "Cámbiate la ropa con otra persona",
+            "Tira los dados",
+            "Desabrocha su pantalón con los dientes",
+            "Haz un masaje en sus muslos",
+            "Juega con su ombligo con la lengua",
+            "Dale una nalgada y un beso después",
+            "Bebe un shot y haz un reto doble",
+            "Dile al oído lo que quieres hacerle esta noche",
+            "Dale un beso en cada parte del cuerpo que empiece con la letra M",
+            "Tu pareja debe elegir un sitio de tu cuerpo para besar",
+            "Tócate frente a tu pareja por 10 segundos",
+            "Besa a tu pareja sin usar las manos durante 30 segundos",
+            "Haz que tu pareja se ponga encima tuya y lo que surja",
+            "Tu pareja puede tocarte sin besarte durante 1 minuto",
+            "Toca a tu pareja con los ojos vendados durante 30 segundos",
+            "Intercambiad ropa por una ronda",
+            "Besa apasionadamente a tu pareja",
+            "Chupa la parte del cuerpo que elija tu pareja",
+            "Haz que tu pareja se ponga en cuatro por 20 segundos y haz lo que quieras",
+            "Tira ruleta y dados",
+            "Tira los dados",
+            "Tira los dados",
+            "Tira los dados",
+            "Tira los dados",
+            "Tira los dados",
+            "Tira los dados",
+            "Tira los dados",   
+        ];
+
+        function toggleNormas() {
+            const normas = document.getElementById("normas");
+            normas.style.display = normas.style.display === "none" ? "block" : "none";
+        }
+
+        function mostrarReto() {
+            const reto = retos[Math.floor(Math.random() * retos.length)];
+            document.getElementById("reto").innerText = reto;
+        }
+
+        function agregarReto() {
+            const nuevoReto = document.getElementById("nuevoReto").value;
+            if (nuevoReto.trim() !== "") {
+                retos.push(nuevoReto);
+                document.getElementById("nuevoReto").value = "";
+                alert("Reto añadido correctamente!");
+            }
+        }
+
+        function tirarDados() {
+            const acciones = ["Lamer", "Besar", "Morder", "Acariciar", "Chupar", "Rozar", "Jugar con", "Soplar suavemente sobre"];
+            const partesCuerpo = ["Cuello", "Pecho", "Piernas", "Espalda", "Labios", "Orejas", "Muslos", "Manos", "Dedos", "Cadera", "Abdomen", "Rodillas", "Nuca", "Colita", "Coñete", "Culito"];
+            const posiciones = ["Misionero", "Perrito", "Vaquera", "69", "De pie", "Cucharita", "Contra la pared", "Encima de una mesa", "En el sofá", "En la ducha", "De espaldas", "De rodillas", "Tumbados frente a frente"];
+            
+            document.getElementById("resultadoDados").innerText = `${acciones[Math.floor(Math.random() * acciones.length)]} en ${partesCuerpo[Math.floor(Math.random() * partesCuerpo.length)]} en posición ${posiciones[Math.floor(Math.random() * posiciones.length)]}`;
+        }
+    </script>
+</body>
+</html>
