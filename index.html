@@ -103,7 +103,13 @@
     </div>
 
     <script>
-        let retos = [
+        function toggleNormas() {
+            const normas = document.getElementById("normas");
+            normas.style.display = normas.style.display === "none" ? "block" : "none";
+        }
+
+        function mostrarReto() {
+            const retos = [
             "Bebe un trago y besa con sabor",
             "Quita una prenda usando solo los dientes",
             "Dale un beso con mordida en los labios",
@@ -146,7 +152,6 @@
             "Dale una nalgada y un beso después",
             "Bebe un shot y haz un reto doble",
             "Dile al oído lo que quieres hacerle esta noche",
-            "Dale un beso en cada parte del cuerpo que empiece con la letra M",
             "Tu pareja debe elegir un sitio de tu cuerpo para besar",
             "Tócate frente a tu pareja por 10 segundos",
             "Besa a tu pareja sin usar las manos durante 30 segundos",
@@ -165,16 +170,18 @@
             "Tira los dados",
             "Tira los dados",
             "Tira los dados",   
-        ];
+            ];
+            const partesCuerpo = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "L", "M", "N", "O", "P", "R", "F", "T", "V"];
+            const tipo = Math.random() < 0.91 ? "reto" : "beso"; 
+            let resultado;
+            if (tipo === "reto") {
+                resultado = retos[Math.floor(Math.random() * retos.length)];
+            } else {
+                const parteAleatoria = partesCuerpo[Math.floor(Math.random() * partesCuerpo.length)];
+                resultado = "Besa en un sitio que empiece por: " + parteAleatoria;
+            }
 
-        function toggleNormas() {
-            const normas = document.getElementById("normas");
-            normas.style.display = normas.style.display === "none" ? "block" : "none";
-        }
-
-        function mostrarReto() {
-            const reto = retos[Math.floor(Math.random() * retos.length)];
-            document.getElementById("reto").innerText = reto;
+            document.getElementById("reto").innerText = resultado;
         }
 
         function agregarReto() {
